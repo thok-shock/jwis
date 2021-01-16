@@ -1,5 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Overview from './Dashboard/Overview';
+
+if (module.hot) {
+    module.hot.accept();
+  }
 
 class Main extends React.Component {
     constructor(props) {
@@ -7,9 +12,9 @@ class Main extends React.Component {
     }
 
     render() {
-        return <div>
-            <p>It's THOK o'clock now</p>
-            </div>
+        return <Overview />
+
+
     }
 }
 

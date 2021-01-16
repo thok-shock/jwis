@@ -13,11 +13,17 @@
   "author": "Ryan S Werner",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
+    "html-webpack-plugin": "^4.5.1",
     "mysql": "^2.18.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-bootstrap": "^1.4.3",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "webpack-dev-middleware": "^4.1.0",
+    "webpack-hot-middleware": "^2.25.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

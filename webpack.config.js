@@ -1,16 +1,16 @@
-module.exports = env => {
 
-const ENV = env.NODE_ENV
 const path = require('path')
-const MODE = (ENV === 'prod') ? 'production' : 'development'
-const CURR_PATH = env.NODE_ENV === 'prod' ? path.join(__dirname, 'dist/') : path.join(__dirname, 'dev/');
-console.log('Rendering in the following environment: ' + MODE)
+const CURR_PATH = process.env.NODE_ENV === 'prod' ? path.join(__dirname, 'dist/') : path.join(__dirname, 'dev/');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+//console.log(path.resolve(__dirname, "dist"))
 
-  return {
-    mode: MODE,
-    entry: {
-        home: './src/index.js'
-    },
+module.exports = {
+    mode: 'development',
+    entry: [
+        './src/index.js',
+        'webpack-hot-middleware/client'
+    ],
     module: {
       rules: [
         {
@@ -26,9 +26,20 @@ console.log('Rendering in the following environment: ' + MODE)
         }
       ]
     },
+    devServer: {
+      hot: true
+    },
     output: {
-      filename: 'index.js',
-      path: CURR_PATH
-    }
-  }
+      filename: 'index_bundle.js',
+      publicPath: '/'
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: 'development',
+        template: 'dev/index.html',
+        filename: 'dev/index.html',
+        inject: true
+      }),
+      new webpack.HotModuleReplacementPlugin()
+    ]
   };
