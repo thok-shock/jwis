@@ -13,8 +13,7 @@ function locateItem(items, upc, updateThisItem) {
         }
     })
     if (foundItem) {
-        
-        foundItem.itemExpiration = foundItem.itemExpiration.slice(0,10)
+        if (foundItem.itemExpiration) foundItem.itemExpiration = foundItem.itemExpiration.slice(0,10);
         foundItem.itemLastModified = new Date(foundItem.itemLastModified).toLocaleString()
             console.log(foundItem.itemExpiration)
         
