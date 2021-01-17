@@ -16,8 +16,15 @@ function locateItem(items, upc, updateThisItem) {
         if (foundItem.itemExpiration) foundItem.itemExpiration = foundItem.itemExpiration.slice(0,10);
         foundItem.itemLastModified = new Date(foundItem.itemLastModified).toLocaleString()
             console.log(foundItem.itemExpiration)
+
+            console.log(foundItem.itemName)
+            if (foundItem.itemName == null) {
+                var audio = new Audio('/audio/bad.m4a');
+                        audio.play();
+            }
         
     }
+    
     updateThisItem(foundItem)
 }
 }
@@ -58,10 +65,16 @@ export default function Item(props) {
         })
         .then(res => {
             if (res.status == 200) {
+                var audio = new Audio('/audio/good.m4a');
+                        audio.play();
                 toast.success('Successfully updated item')
                 window.location.href = '/add'
+                
             } else {
                 toast.error('Unexpected error occurred')
+                var audio = new Audio('/audio/bad.m4a');
+                        audio.play();
+            
             }
             return res.json()
         })
@@ -74,7 +87,7 @@ export default function Item(props) {
             <Form.Row>
             <Form.Group as={Col} controlId='name'>
             <Form.Label>Item Name</Form.Label>
-            <Form.Control onChange={onChange} maxLength='45' defaultValue={thisItem.itemName}></Form.Control>
+            <Form.Control onChange={onChange} maxLength='45' defaultValue={thisItem.itemName} autoFocus></Form.Control>
             </Form.Group>
             <Col>
             <h3 className='text-muted' style={{marginTop: '32px'}}>{id}</h3></Col>

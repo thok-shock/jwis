@@ -52,7 +52,7 @@ export default function Overview(props) {
         .then(res => {
             if (res.status != 500) {
                 toast.success('Item Added')
-                var audio = new Audio('/audio/success.mp3');
+                var audio = new Audio('/audio/good.m4a');
                 audio.play();
                 if (res.status == 201) {
                     console.log(res)
@@ -129,8 +129,12 @@ export default function Overview(props) {
                 }) 
                 toast.success('Item Checked Out')
                 updateItems(returnItems)
+                var audio = new Audio('/audio/good.m4a');
+                        audio.play();
             } else {
                 toast.error('An unexpected error occurred')
+                var audio = new Audio('/audio/bad.m4a');
+                        audio.play();
             }
         })
     }
