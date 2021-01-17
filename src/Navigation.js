@@ -4,12 +4,12 @@ import { Navbar, Nav, Button, Form, FormControl, NavDropdown } from 'react-boots
 
 export default function Navigation (props) {
     return <Navbar bg="light" expand="lg">
-    <Navbar.Brand href="#home">JWIS (Johnson-Werner Inventory System)</Navbar.Brand>
+    <Navbar.Brand href="/">JWIS (Johnson-Werner Inventory System)</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="mr-auto">
-        <Nav.Link href="#home">Checkout Items</Nav.Link>
-        <Nav.Link href="#link">Add Items</Nav.Link>
+        <Nav.Link href="/checkout">Checkout Items</Nav.Link>
+        <Nav.Link href="/add">Add Items</Nav.Link>
         <NavDropdown title="Utilities" id="basic-nav-dropdown">
           <NavDropdown.Item href="#action/3.1">TBD</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.2">TBD</NavDropdown.Item>

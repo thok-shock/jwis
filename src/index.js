@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ToastContainer } from 'react-toastify';
 import Overview from './Dashboard/Overview';
+import "react-toastify/dist/ReactToastify.css";
+
 
 if (module.hot) {
     module.hot.accept();
@@ -12,7 +15,10 @@ class Main extends React.Component {
     }
 
     render() {
-        return <Overview />
+        return <div>
+            <Overview />
+            <ToastContainer></ToastContainer>
+            </div>
 
 
     }
