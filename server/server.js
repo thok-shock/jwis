@@ -9,7 +9,7 @@ const CURR_PATH = process.env.NODE_ENV === 'prod' ? path.join(__dirname, '../dis
 const PORT = process.env.NODE_ENV === 'prod' ? 2000 : 3000;
 console.log(process.env.NODE_ENV)
 const ItemAPI = require('./ItemAPI')
-const audioRouter = require('./Audio')
+const audioRouter = require('./audio')
 
 const App = express()
 
