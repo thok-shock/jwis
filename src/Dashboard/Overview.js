@@ -14,6 +14,7 @@ import Item from '../Item/Item';
 
 import { toast, ToastContainer } from 'react-toastify';
 import Checkout from '../Checkout/Checkout';
+import RegularDashboard from './RegularDashboard';
 
 
 function play() {
@@ -147,7 +148,7 @@ export default function Overview(props) {
                 <Col>
                 <Switch>
                     <Route exact path='/'>
-                    <InventoryDisplay items={items} />
+                    <RegularDashboard items={items} />
                     </Route>
                     <Route exact path='/add'>
                         <Add items={items} addItem={addItemFromUPC} />
