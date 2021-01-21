@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from "react-bootstrap";
+import { ArrowDown, ArrowUp } from "react-bootstrap-icons";
+import {
+  sortByDescription,
+  sortByExpiration,
+  sortByName,
+  sortByQuantity,
+  sortByPrice
+} from "./InventorySortingFunctions";
+
+function isExpired(itemExpiration) {
+  const pastDate = new Date(itemExpiration)
+  const currDate = new Date()
+  if (pastDate.getTime() < currDate.getTime()) return {color: 'red'}
+}
 
 function renderRows(items, sortType, sortDirection) {
-
   if (items) {
-    
-    
     const nonZeroItems = items.filter((item) => item.itemQuantity > 0);
 
     //create an array of readable items
-    const convertedItems =  nonZeroItems.map((item) => {
-
+    const convertedItems = nonZeroItems.map((item) => {
       //take the database date values and convert them into readable strings
       if (item.itemExpiration) {
         item.itemExpiration = new Date(
@@ -35,7 +45,7 @@ function renderRows(items, sortType, sortDirection) {
           <td>{item.itemName}</td>
           <td>{item.itemQuantity}</td>
           <td>{item.itemDescription}</td>
-          <td>{item.itemExpiration}</td>
+          <td style={isExpired(item.itemExpiration)}>{item.itemExpiration}</td>
           <td>{item.itemPrice}</td>
           <td>{item.itemLastModified}</td>
         </tr>
@@ -45,24 +55,22 @@ function renderRows(items, sortType, sortDirection) {
     //perform sorting and return the sorted values
 
     return convertedItems.sort((itemA, itemB) => {
-     console.log(itemA.props.item)
-     console.log(itemB.props.item)
+      //console.log(itemA.props.item);
+      //console.log(itemB.props.item);
 
-     //sort by name, descending
-     if (itemA.props.item.itemName && itemB.props.item.itemName) {
-      if (itemA.props.item.itemName.toUpperCase() > itemB.props.item.itemName.toUpperCase()) {
-        return 1
-      } else if (itemA.props.item.itemName == itemB.props.item.itemName) {
-        return 0
-      } else {
-        return -1
+      switch (sortType) {
+        case "itemName":
+          return sortByName(itemA, itemB, sortDirection);
+        case "itemQuantity":
+          return sortByQuantity(itemA, itemB, sortDirection);
+        case "itemDescription":
+          return sortByDescription(itemA, itemB, sortDirection);
+        case "itemExpiration":
+          return sortByExpiration(itemA, itemB, sortDirection);
+          case "itemPrice":
+            return sortByPrice(itemA, itemB, sortDirection);
       }
-    } else {
-      return -1
-    }
-    })
-
-
+    });
   } else {
     return (
       <tr>
@@ -78,19 +86,68 @@ function renderRows(items, sortType, sortDirection) {
 }
 
 export default function InventoryDisplay(props) {
+  const [sortType, updateSortType] = useState("itemExpiration");
+  const [sortDirection, updateSortDirection] = useState(true);
+
+  function updateSort(newType) {
+    if (sortType == newType) {
+      updateSortDirection(!sortDirection);
+    } else {
+      updateSortType(newType);
+    }
+  }
+
+  function determineArrow(columnName) {
+    if (columnName === sortType)
+    return sortDirection ? <ArrowUp /> : <ArrowDown />
+  }
+
   return (
     <Table striped bordered hover size="sm">
       <thead>
         <tr>
-          <td>Name</td>
-          <td>Quantity</td>
-          <td>Description</td>
-          <td>Expiration Date</td>
-          <td>Price (per unit)</td>
+          <td
+            onClick={(e) => {
+              updateSort("itemName");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            Name {determineArrow('itemName')}
+          </td>
+          <td
+            onClick={(e) => {
+              updateSort("itemQuantity");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            Quantity {determineArrow('itemQuantity')}
+          </td>
+          <td
+            onClick={(e) => {
+              updateSort("itemDescription");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            Description {determineArrow('itemDescription')}
+          </td>
+          <td
+            onClick={(e) => {
+              updateSort("itemExpiration");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            Expiration Date {determineArrow('itemExpiration')}
+          </td>
+          <td
+          onClick={(e) => {
+            updateSort("itemPrice");
+          }}
+          style={{ cursor: "pointer" }}
+          >Price (per unit) {determineArrow('itemPrice')}</td>
           <td>Last Modified Time</td>
         </tr>
       </thead>
-      <tbody>{renderRows(props.items)}</tbody>
+      <tbody>{renderRows(props.items, sortType, sortDirection)}</tbody>
     </Table>
   );
 }
