@@ -19,6 +19,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "html-webpack-plugin": "^4.5.1",
     "mysql": "^2.18.1",
+    "node-fetch": "^2.6.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.4.3",
     "react-bootstrap-icons": "^1.2.3",

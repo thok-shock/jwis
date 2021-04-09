@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("./db");
+const fetch = require('node-fetch')
 
 const ItemAPI = express.Router();
 
@@ -29,7 +30,7 @@ function createOrAddItem(upc, data) {
             db.query(
               {
                 sql:
-                  "INSERT INTO items (itemID, itemName, itemDescription, itemExpiration, itemPrice, itemLastModified, itemQuantity) VALUES (?,?,?,?,?,?,?);",
+                  "INSERT INTO items (itemID, itemName, itemDescription, itemExpiration, itemPrice, itemLastModified, itemQuantity, itemCategory, itemPhotoURL) VALUES (?,?,?,?,?,?,?,?,?);",
                 values: [
                   data.itemID,
                   data.itemName,
@@ -37,7 +38,9 @@ function createOrAddItem(upc, data) {
                   data.itemExpiration,
                   data.itemPrice,
                   new Date(),
-                  1,
+                  data.itemQuantity,
+                  data.itemCategory,
+                  data.itemPhotoURL
                 ],
               },
               function (err, row) {
@@ -91,8 +94,8 @@ function getItems(id, limit) {
 function modifyItem(data) {
     return new Promise((resolve, reject) => {
         db.query({
-            sql: 'UPDATE items SET itemName = ?, itemDescription = ?, itemExpiration = ?, itemPrice = ?, itemLastModified = ?, itemQuantity = ? WHERE itemID = ?;',
-            values: [data.itemName, data.itemDescription, new Date(data.itemExpiration), data.itemPrice, new Date(), data.itemQuantity, data.itemID]
+            sql: 'UPDATE items SET itemName = ?, itemDescription = ?, itemExpiration = ?, itemPrice = ?, itemLastModified = ?, itemQuantity = ?, itemCategory = ?, itemPhotoURL = ? WHERE itemID = ?;',
+            values: [data.itemName, data.itemDescription, new Date(data.itemExpiration), data.itemPrice, new Date(), data.itemQuantity, data.itemCategory, data.itemPhotoURL, data.itemID]
         }, function(err, row) {
             err ? reject(err) : resolve(row)
         })
@@ -140,6 +143,24 @@ ItemAPI.put('/', (req, res) => {
         console.log(err)
         res.status(500).json(err)
     })
+})
+
+ItemAPI.get('/search', (req, res) => {
+  if (req.query.id) {
+    fetch('https://api.upcitemdb.com/prod/trial/lookup?upc=' + req.query.id)
+  .then(item => {
+    return(item.json())
+  })
+  .then(item => {
+    console.log(item)
+    res.json(item)
+})
+.catch(err => {
+  console.log('there was an error searching for an item')
+  res.json(err)
+})
+
+  }
 })
 
 module.exports = ItemAPI;

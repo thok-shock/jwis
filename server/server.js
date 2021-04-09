@@ -10,6 +10,7 @@ const PORT = process.env.NODE_ENV === 'prod' ? 2000 : 3000;
 console.log(process.env.NODE_ENV)
 const ItemAPI = require('./ItemAPI')
 const audioRouter = require('./audio')
+const fetch = require('node-fetch')
 
 const App = express()
 
