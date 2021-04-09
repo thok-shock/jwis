@@ -6,13 +6,23 @@ import {
   sortByExpiration,
   sortByName,
   sortByQuantity,
-  sortByPrice
+  sortByPrice,
+  sortByModified
 } from "./InventorySortingFunctions";
 
 function isExpired(itemExpiration) {
   const pastDate = new Date(itemExpiration)
   const currDate = new Date()
   if (pastDate.getTime() < currDate.getTime()) return {color: 'red'}
+}
+
+function maxOutLength(text) {
+  let abbreviatedText = text
+  if (text && text.length > 200) {
+    abbreviatedText = text.substring(0, 200)
+    abbreviatedText += ' . . .'
+  }
+  return abbreviatedText
 }
 
 function renderRows(items, sortType, sortDirection) {
@@ -42,11 +52,11 @@ function renderRows(items, sortType, sortDirection) {
           }}
           style={{ cursor: "pointer" }}
         >
-          <td>{item.itemName}</td>
+          <td><img src={item.itemPhotoURL} height='50px'></img> {item.itemName}</td>
           <td>{item.itemQuantity}</td>
-          <td>{item.itemDescription}</td>
+          <td>{maxOutLength(item.itemDescription)}</td>
           <td style={isExpired(item.itemExpiration)}>{item.itemExpiration}</td>
-          <td>{item.itemPrice}</td>
+          {false && <td>{item.itemPrice}</td>}
           <td>{item.itemLastModified}</td>
         </tr>
       );
@@ -69,6 +79,8 @@ function renderRows(items, sortType, sortDirection) {
           return sortByExpiration(itemA, itemB, sortDirection);
           case "itemPrice":
             return sortByPrice(itemA, itemB, sortDirection);
+            case "itemModified":
+            return sortByModified(itemA, itemB, sortDirection);
       }
     });
   } else {
@@ -86,8 +98,8 @@ function renderRows(items, sortType, sortDirection) {
 }
 
 export default function InventoryDisplay(props) {
-  const [sortType, updateSortType] = useState("itemExpiration");
-  const [sortDirection, updateSortDirection] = useState(true);
+  const [sortType, updateSortType] = useState("itemModified");
+  const [sortDirection, updateSortDirection] = useState(false);
 
   function updateSort(newType) {
     if (sortType == newType) {
@@ -138,13 +150,18 @@ export default function InventoryDisplay(props) {
           >
             Expiration Date {determineArrow('itemExpiration')}
           </td>
-          <td
+          {false && <td
           onClick={(e) => {
             updateSort("itemPrice");
           }}
           style={{ cursor: "pointer" }}
-          >Price (per unit) {determineArrow('itemPrice')}</td>
-          <td>Last Modified Time</td>
+          >Price (per unit) {determineArrow('itemPrice')}</td>}
+          <td
+          onClick={(e) => {
+            updateSort("itemModified");
+          }}
+          style={{ cursor: "pointer", minWidth: '200px' }}
+          >Last Modified Time {determineArrow('itemModified')}</td>
         </tr>
       </thead>
       <tbody>{renderRows(props.items, sortType, sortDirection)}</tbody>

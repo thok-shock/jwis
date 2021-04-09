@@ -132,10 +132,30 @@ function sortByPrice(itemA, itemB, sortDirection) {
     }
 }
 
+function sortByModified(itemA, itemB, sortDirection) {
+  const aDate = new Date(itemA.props.item.itemLastModified);
+  const bDate = new Date(itemB.props.item.itemLastModified);
+
+  if (sortDirection) {
+    if (itemA.props.item.itemLastModified && itemB.props.item.itemLastModified) {
+      if (aDate.getTime() === bDate.getTime()) return 0;
+      return aDate.getTime() > bDate.getTime() ? 1 : -1;
+    } else {
+      return itemA.props.item.itemLastModified === null ? 1 : -1;
+    }
+  } else {
+    if (itemA.props.item.itemLastModified && itemB.props.item.itemLastModified) {
+      if (aDate.getTime() === bDate.getTime()) return 0;
+      return aDate.getTime() > bDate.getTime() ? -1 : 1;
+    } else return itemA.props.item.itemLastModified === null ? 1 : -1;
+  }
+}
+
 module.exports = {
   sortByName,
   sortByQuantity,
   sortByDescription,
   sortByExpiration,
-  sortByPrice
+  sortByPrice,
+  sortByModified
 };
